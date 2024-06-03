@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmar Salida</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Confirmar Salida</h1>
+        <p>¿Está seguro de que desea registrar su salida?</p>
+        <button id="btnConfirmarSalida">Confirmar Salida</button>
+        <button id="btnCancelar">Cancelar</button>
+    </div>
+
+    <script>
+        // Obtener el usuario del localStorage
+        const usuario = localStorage.getItem('Usuario');
+
+        // Función para registrar la salida
+        async function registrarSalida() {
+            const fecha = new Date().toISOString().slice(0, 10); // Obtener la fecha actual en formato YYYY-MM-DD
+            const hora = new Date().toISOString().slice(11, 19); // Obtener la hora actual en formato HH:MM:SS
+
+            try {
+                // Obtener coordenadas de latitud y longitud
+                const coordenadas = await obtenerCoordenadas();
+                const { latitude, longitude } = coordenadas;
+
+                const respuesta = await fetch('http://localhost:3000/registrarSalida', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ usuario, fecha, hora, latitud: latitude, longitud: longitude })
+                });
+
+                if (respuesta.ok) {
+                    alert('Salida registrada exitosamente.');
+                    // Redirigir a la página principal del dashboard
+                    window.location.href = 'dashboard.html';
+                } else {
+                    const mensajeError = await respuesta.text();
+                    alert(`Error al registrar salida: ${mensajeError}`);
+                }
+            } catch (error) {
+                console.error('Error al registrar salida:', error);
+                alert('Error al registrar salida. Consulta la consola para más detalles.');
+            }
+        }
+
+        // Función para obtener coordenadas de latitud y longitud
+        function obtenerCoordenadas() {
+            return new Promise((resolve, reject) => {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition((position) => {
+                        resolve({
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude
+                        });
+                    }, (error) => {
+                        reject(error);
+                    });
+                } else {
+                    reject(new Error('Geolocalización no soportada.'));
+                }
+            });
+        }
+
+        // Añadir eventos a los botones
+        document.getElementById('btnConfirmarSalida').addEventListener('click', registrarSalida);
+        document.getElementById('btnCancelar').addEventListener('click', () => {
+            // Redirigir al dashboard sin registrar la salida
+            window.location.href = 'dashboard.html';
+        });
+    </script>
+</body>
+</html>
