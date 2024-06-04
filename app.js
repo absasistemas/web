@@ -17,8 +17,18 @@ app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
 // Configurar ruta para la página de inicio
-app.get('/', (req, res) => {
+/*app.get('/', (req, res) => {
     res.redirect('/login.html'); // Redirigir a login.html
+});*/
+
+// Ruta por defecto para cargar login.html
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/login.html');
+});
+
+// Ruta para acceder a registro.html
+app.get('/registro', (req, res) => {
+  res.sendFile(__dirname + '/registro.html');
 });
 
 app.use(session({
