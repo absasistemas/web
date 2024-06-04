@@ -1,23 +1,17 @@
 {
-  "name": "absa.sistemas.resgistro-web",
+  "name": "proyectos-absa",
   "version": "1.0.0",
-  "description": "Registro de asistencias web",
   "main": "app.js",
   "scripts": {
     "start": "node app.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "bcrypt": "^5.1.1",
-    "cors": "^2.8.5",
-    "express": "^4.19.2",
-    "express-session": "^1.18.0",
-    "moment-timezone": "^0.5.45",
+    "express": "^4.17.1",
+    "body-parser": "^1.19.0",
     "mysql": "^2.18.1",
-    "nodemailer": "^6.9.13"
-  },
-  "devDependencies": {},
-  "description": ""
+    "bcrypt": "^5.0.1",
+    "moment-timezone": "^0.5.34",
+    "nodemailer": "^6.4.16",
+    "cors": "^2.8.5"
+  }
 }
