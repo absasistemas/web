@@ -16,6 +16,10 @@ app.use(express.json());
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
+// Configurar ruta para la página de inicio
+app.get('/', (req, res) => {
+    res.redirect('/login.html'); // Redirigir a login.html
+});
 
 app.use(session({
     secret: 'secret_key',
