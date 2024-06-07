@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-//const bcrypt = require('bcrypt');
 const bcrypt = require('bcryptjs');
 const mysql = require('mysql');
 const session = require('express-session');
@@ -9,7 +8,8 @@ const timeZone = 'America/Guayaquil';
 const nodemailer = require('nodemailer');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+//const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 80; // Usar el puerto 80 o un puerto dinámico proporcionado por el entorno
 
 //app.use(cors());
 // Configura CORS para permitir solicitudes desde tu dominio de GitHub Pages
@@ -17,6 +17,7 @@ app.use(cors({
     origin: 'https://absasistemas.github.io',
     credentials: true
 }));
+
 app.use(express.json());
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
@@ -43,8 +44,8 @@ const pool = mysql.createPool({
     connectionLimit: 10, // Número máximo de conexiones en el pool
      host: '128.0.0.148',
     port: 3333,
-    user: 'sa',
-    password: '1234',
+    user: 'webuser',
+    password: '$obrevivi84',
     database: 'reportes_absa'
 });
 const conexionDB = mysql.createConnection({
@@ -417,27 +418,6 @@ app.post('/resetearContrasena', async (req, res) => {
     });
 });
 
-
-/**app.post('/actualizarDispositivo', (req, res) => {
-    const { usuario, correo, usuarioCambia } = req.body;
-
-  // Enviar correo para registrar el dispositivo
-                const mailOptions = {
-                    from: 'absa.sistemas@gmail.com',
-                    to: correo,
-                    subject: 'Registro de Nuevo Dispositivo',
-                    text: `Hola ${usuario},\n\nPor favor, registra tu  nuevo dispositivo usando el siguiente enlace:\n\nhttp://localhost:3000/registrarDispositivo.html?usuario=${usuario}`
-                };
-
-                transporter.sendMail(mailOptions, (errorEnvio, info) => {
-                    if (errorEnvio) {
-                        console.error('Error al enviar correo:', errorEnvio);
-                        return res.status(500).json({ error: 'Error interno del servidor' });
-                    }
-
-                    res.status(200).send('Correo enviado exitosamente.');
-                });    
-});*/
 
 app.post('/actualizarDispositivo', (req, res) => {
     const { usuario, correo, usuarioCambia, timeZone } = req.body;
