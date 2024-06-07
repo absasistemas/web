@@ -9,7 +9,8 @@ async function iniciarSesion() {
     const visitorId = result.visitorId;
 
     try {
-        const respuesta = await fetch('http://localhost:3000/login', {
+        //const respuesta = await fetch('http://localhost:3000/login', {
+		 const respuesta = await fetch('/login', { // Cambiamos la URL a una ruta relativa	
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -30,10 +31,15 @@ async function iniciarSesion() {
             const fechaLoginUTC = new Date().toISOString();  // Guardar en UTC
             sessionStorage.setItem('fechaLoginUTC', fechaLoginUTC);
 
-            if (data.cambioContrasenaRequerido) {
+           /* if (data.cambioContrasenaRequerido) {
                 window.location.href = 'http://localhost:3000/cambiarContrasena.html';
             } else {
                 window.location.href = 'http://localhost:3000/dashboard.html';
+            }*/
+			 if (data.cambioContrasenaRequerido) {
+                window.location.href = '/cambiarContrasena.html'; // Cambiamos la URL a una ruta relativa
+            } else {
+                window.location.href = '/dashboard.html'; // Cambiamos la URL a una ruta relativa
             }
         } else {
             alert(`Error: ${data.message || 'Error desconocido en el servidor'}`);
