@@ -11,15 +11,15 @@ const nodemailer = require('nodemailer');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
+//app.use(cors());
+// Configura CORS para permitir solicitudes desde tu dominio de GitHub Pages
+app.use(cors({
+    origin: 'https://absasistemas.github.io',
+    credentials: true
+}));
 app.use(express.json());
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
-
-// Configurar ruta para la página de inicio
-/*app.get('/', (req, res) => {
-    res.redirect('/login.html'); // Redirigir a login.html
-});*/
 
 // Ruta por defecto para cargar login.html
 app.get('/', (req, res) => {
