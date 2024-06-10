@@ -1,4 +1,76 @@
+require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
+const bcrypt = require('bcryptjs');
+const mysql = require('mysql');
+const session = require('express-session');
+const moment = require('moment-timezone');
+const nodemailer = require('nodemailer');
+
+const app = express();
+const PORT = process.env.PORT || 80;
+
+// Configura CORS para permitir solicitudes desde tu dominio de GitHub Pages
+app.use(cors({
+    origin: 'https://absasistemas.github.io',
+    credentials: true
+}));
+
+app.use(express.json());
+app.use(express.static('public'));
+app.set('view engine', 'ejs');
+
+// Ruta por defecto para cargar login.html
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/login.html');
+});
+
+// Ruta para acceder a registro.html
+app.get('/registro', (req, res) => {
+    res.sendFile(__dirname + '/registro.html');
+});
+
+app.use(session({
+    secret: process.env.SESSION_SECRET || 'secret_key',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 24 * 60 * 60 * 1000 } // 1 día
+}));
+
+const pool = mysql.createPool({
+    connectionLimit: 10, 
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
+});
+
+const conexionDB = mysql.createConnection({
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
+});
+
+conexionDB.connect((error) => {
+    if (error) {
+        console.error('Error al conectar a la base de datos:', error);
+    } else {
+        console.log('Conexión exitosa a la base de datos.');
+    }
+});
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD
+    }
+});
+
+/*const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const mysql = require('mysql');
@@ -68,7 +140,7 @@ const transporter = nodemailer.createTransport({
         pass: 'zblrsovopldepqoi'
     }
 });
-
+*/
 
 app.post('/registro', async (req, res) => {
     try {
