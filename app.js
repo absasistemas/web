@@ -6,12 +6,9 @@ const session = require('express-session');
 const moment = require('moment-timezone');
 const timeZone = 'America/Guayaquil';
 const nodemailer = require('nodemailer');
-
 const app = express();
-//const PORT = process.env.PORT || 3000;
 const PORT = process.env.PORT || 80; // Usar el puerto 80 o un puerto dinámico proporcionado por el entorno
 
-//app.use(cors());
 // Configura CORS para permitir solicitudes desde tu dominio de GitHub Pages
 app.use(cors({
     origin: 'https://absasistemas.github.io',
